@@ -3,26 +3,25 @@ from PIL import Image
 import folium
 from streamlit_folium import st_folium
 
-# MBTI 궁합 추천 및 데이트 코스 + 장소 연결
+# MBTI 궁합 추천 및 데이트 코스 + 장소 연결 (장소 2개 이상으로 확장)
 mbti_matches = dict(sorted({
-    "INTJ": {"match": "ENFP", "reason": "ENFP의 따뜻함과 창의력이 INTJ의 계획적인 성향을 보완해줍니다.", "date": "아날로그 감성 북카페 & 창작 공방 체험 📚🎨", "place": "카페거리 (연남동)"},
-    "INTP": {"match": "ESFJ", "reason": "ESFJ의 사교성과 따뜻함이 INTP의 내향적 성향에 활력을 줍니다.", "date": "전시회 데이트 & 디저트 카페 🍰🖼️", "place": "디뮤지엄 (성수)"},
-    "ENTJ": {"match": "INFP", "reason": "INFP의 감성적인 배려가 ENTJ의 열정과 잘 어우러집니다.", "date": "공원 산책 & 감성 영화관 🎬🌳", "place": "서울숲"},
-    "ENTP": {"match": "INFJ", "reason": "INFJ의 이상주의와 ENTP의 에너지가 깊이 있는 소통을 가능하게 합니다.", "date": "북토크 & 즉흥 여행 📚✈️", "place": "책읽는 공간 위트앤시니컬"},
-    "INFJ": {"match": "ENFP", "reason": "감성과 이상을 추구하는 INFJ에게 ENFP의 따뜻함이 큰 위로가 됩니다.", "date": "시집 낭독회 & 벽화마을 데이트 🎨📖", "place": "이화 벽화마을"},
-    "INFP": {"match": "ENTJ", "reason": "INFP의 이상주의와 ENTJ의 추진력이 좋은 균형을 이룹니다.", "date": "감성 카페 & 마켓 구경 ☕🛍️", "place": "성수동 서울숲길 마켓"},
-    "ENFJ": {"match": "INFP", "reason": "서로에 대한 공감 능력이 뛰어나 따뜻한 관계를 유지합니다.", "date": "소극장 연극 & 야경 산책 🎭🌃", "place": "대학로 소극장 거리"},
-    "ENFP": {"match": "INTJ", "reason": "INTJ의 깊은 사고력과 ENFP의 창의성은 훌륭한 시너지를 냅니다.", "date": "보드게임 카페 & 벼룩시장 🧩🛒", "place": "홍대 걷고싶은 거리"},
-    "ISTJ": {"match": "ESFP", "reason": "ESFP의 즉흥성과 ISTJ의 책임감이 상호 보완됩니다.", "date": "테마파크 & 저녁 파스타 데이트 🎢🍝", "place": "롯데월드"},
-    "ISFJ": {"match": "ESTP", "reason": "ISFJ의 배려심과 ESTP의 활기찬 성격이 조화를 이룹니다.", "date": "실내 암벽등반 & 건강식 디너 🧗🥗", "place": "더클라이밍 홍대"},
-    "ESTJ": {"match": "ISFP", "reason": "ESTJ의 조직력과 ISFP의 부드러움이 균형을 이룹니다.", "date": "아쿠아리움 & 자연사 박물관 🐠🏛️", "place": "코엑스 아쿠아리움"},
-    "ESFJ": {"match": "INTP", "reason": "ESFJ의 감정 표현력과 INTP의 분석력이 서로를 자극합니다.", "date": "맛집 투어 & 별자리 관측 🌌🍜", "place": "망리단길"},
-    "ISTP": {"match": "ENFJ", "reason": "ENFJ의 따뜻한 관심이 ISTP의 조용한 성향을 끌어냅니다.", "date": "VR 체험 & 플래너 만들기 🎮📓", "place": "홍대 VR파크"},
-    "ISFP": {"match": "ESTJ", "reason": "ESTJ의 결단력과 ISFP의 감수성이 잘 맞습니다.", "date": "한강 피크닉 & 갤러리 데이트 🍱🖌️", "place": "반포 한강공원 & 세빛섬 갤러리"},
-    "ESTP": {"match": "ISFJ", "reason": "ISFJ의 따뜻함과 ESTP의 모험심이 잘 어울립니다.", "date": "카트레이싱 & 야시장 구경 🏎️🌮", "place": "서울랜드 & 남문시장"},
-    "ESFP": {"match": "ISTJ", "reason": "ISTJ의 안정감이 ESFP의 감정 표현을 잘 수용합니다.", "date": "박물관 & 고급 다이닝 데이트 🏺🍽️", "place": "용산 국립중앙박물관 & 한남동 레스토랑"},
+    "INTJ": {"match": "ENFP", "reason": "ENFP의 따뜻함과 창의력이 INTJ의 계획적인 성향을 보완해줍니다.", "date": "아날로그 감성 북카페 & 창작 공방 체험 📚🎨", "places": ["카페거리 (연남동)", "홍대 프린트베이커리"]},
+    "INTP": {"match": "ESFJ", "reason": "ESFJ의 사교성과 따뜻함이 INTP의 내향적 성향에 활력을 줍니다.", "date": "전시회 데이트 & 디저트 카페 🍰🖼️", "places": ["디뮤지엄 (성수)", "성수 카페거리"]},
+    "ENTJ": {"match": "INFP", "reason": "INFP의 감성적인 배려가 ENTJ의 열정과 잘 어우러집니다.", "date": "공원 산책 & 감성 영화관 🎬🌳", "places": ["서울숲", "씨네큐 성수"]},
+    "ENTP": {"match": "INFJ", "reason": "INFJ의 이상주의와 ENTP의 에너지가 깊이 있는 소통을 가능하게 합니다.", "date": "북토크 & 즉흥 여행 📚✈️", "places": ["책읽는 공간 위트앤시니컬", "서울책보고"]},
+    "INFJ": {"match": "ENFP", "reason": "감성과 이상을 추구하는 INFJ에게 ENFP의 따뜻함이 큰 위로가 됩니다.", "date": "시집 낭독회 & 벽화마을 데이트 🎨📖", "places": ["이화 벽화마을", "혜화 시집서점"]},
+    "INFP": {"match": "ENTJ", "reason": "INFP의 이상주의와 ENTJ의 추진력이 좋은 균형을 이룹니다.", "date": "감성 카페 & 마켓 구경 ☕🛍️", "places": ["성수동 서울숲길 마켓", "언더스탠드 에비뉴"]},
+    "ENFJ": {"match": "INFP", "reason": "서로에 대한 공감 능력이 뛰어나 따뜻한 관계를 유지합니다.", "date": "소극장 연극 & 야경 산책 🎭🌃", "places": ["대학로 소극장 거리", "낙산공원"]},
+    "ENFP": {"match": "INTJ", "reason": "INTJ의 깊은 사고력과 ENFP의 창의성은 훌륭한 시너지를 냅니다.", "date": "보드게임 카페 & 벼룩시장 🧩🛒", "places": ["홍대 걷고싶은 거리", "홍대 프리마켓"]},
+    "ISTJ": {"match": "ESFP", "reason": "ESFP의 즉흥성과 ISTJ의 책임감이 상호 보완됩니다.", "date": "테마파크 & 저녁 파스타 데이트 🎢🍝", "places": ["롯데월드", "석촌호수 레스토랑"]},
+    "ISFJ": {"match": "ESTP", "reason": "ISFJ의 배려심과 ESTP의 활기찬 성격이 조화를 이룹니다.", "date": "실내 암벽등반 & 건강식 디너 🧗🥗", "places": ["더클라이밍 홍대", "비건식당 러빙헛"]},
+    "ESTJ": {"match": "ISFP", "reason": "ESTJ의 조직력과 ISFP의 부드러움이 균형을 이룹니다.", "date": "아쿠아리움 & 자연사 박물관 🐠🏛️", "places": ["코엑스 아쿠아리움", "국립과천과학관"]},
+    "ESFJ": {"match": "INTP", "reason": "ESFJ의 감정 표현력과 INTP의 분석력이 서로를 자극합니다.", "date": "맛집 투어 & 별자리 관측 🌌🍜", "places": ["망리단길", "서울시립천문대"]},
+    "ISTP": {"match": "ENFJ", "reason": "ENFJ의 따뜻한 관심이 ISTP의 조용한 성향을 끌어냅니다.", "date": "VR 체험 & 플래너 만들기 🎮📓", "places": ["홍대 VR파크", "삼성전자 홍대 플래그십"]},
+    "ISFP": {"match": "ESTJ", "reason": "ESTJ의 결단력과 ISFP의 감수성이 잘 맞습니다.", "date": "한강 피크닉 & 갤러리 데이트 🍱🖌️", "places": ["반포 한강공원", "세빛섬 갤러리"]},
+    "ESTP": {"match": "ISFJ", "reason": "ISFJ의 따뜻함과 ESTP의 모험심이 잘 어울립니다.", "date": "카트레이싱 & 야시장 구경 🏎️🌮", "places": ["서울랜드", "남문시장"]},
+    "ESFP": {"match": "ISTJ", "reason": "ISTJ의 안정감이 ESFP의 감정 표현을 잘 수용합니다.", "date": "박물관 & 고급 다이닝 데이트 🏺🍽️", "places": ["용산 국립중앙박물관", "한남동 레스토랑"]},
 }.items()))
-
 
 # 추천 장소 목록 (서울)
 seoul_places = {

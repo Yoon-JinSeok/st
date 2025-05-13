@@ -4,7 +4,7 @@ import folium
 from streamlit_folium import st_folium
 
 # MBTI 궁합 추천 및 데이트 코스 + 장소 연결
-mbti_matches = {
+mbti_matches = dict(sorted({
     "INTJ": {"match": "ENFP", "reason": "ENFP의 따뜻함과 창의력이 INTJ의 계획적인 성향을 보완해줍니다.", "date": "아날로그 감성 북카페 & 창작 공방 체험 📚🎨", "place": "카페거리 (연남동)"},
     "INTP": {"match": "ESFJ", "reason": "ESFJ의 사교성과 따뜻함이 INTP의 내향적 성향에 활력을 줍니다.", "date": "전시회 데이트 & 디저트 카페 🍰🖼️", "place": "디뮤지엄 (성수)"},
     "ENTJ": {"match": "INFP", "reason": "INFP의 감성적인 배려가 ENTJ의 열정과 잘 어우러집니다.", "date": "공원 산책 & 감성 영화관 🎬🌳", "place": "서울숲"},
@@ -21,7 +21,8 @@ mbti_matches = {
     "ISFP": {"match": "ESTJ", "reason": "ESTJ의 결단력과 ISFP의 감수성이 잘 맞습니다.", "date": "한강 피크닉 & 갤러리 데이트 🍱🖌️", "place": "반포 한강공원 & 세빛섬 갤러리"},
     "ESTP": {"match": "ISFJ", "reason": "ISFJ의 따뜻함과 ESTP의 모험심이 잘 어울립니다.", "date": "카트레이싱 & 야시장 구경 🏎️🌮", "place": "서울랜드 & 남문시장"},
     "ESFP": {"match": "ISTJ", "reason": "ISTJ의 안정감이 ESFP의 감정 표현을 잘 수용합니다.", "date": "박물관 & 고급 다이닝 데이트 🏺🍽️", "place": "용산 국립중앙박물관 & 한남동 레스토랑"},
-}
+}.items()))
+
 
 # 추천 장소 목록 (서울)
 seoul_places = {

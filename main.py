@@ -39,8 +39,8 @@ place_coords = {
     "한남동 레스토랑": [37.5270, 127.0008]
 }
 
-# MBTI 궁합 추천 및 데이트 코스 + 장소 연결 (장소 2개 이상으로 확장)
-# ... mbti_matches 정의는 이전과 동일하게 유지 ...
+# 임시 MBTI 데이터 (NameError 방지용)
+mbti_matches = {"INTJ": {"match": "ENFP", "reason": "예시", "date": "예시", "places": ["카페거리 (연남동)", "홍대 프린트베이커리"]}}
 
 # Streamlit 앱 설정
 st.set_page_config(page_title="MBTI 커플 궁합 추천 💘", page_icon="💑", layout="wide")

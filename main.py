@@ -1,5 +1,7 @@
 import streamlit as st
 from PIL import Image
+import folium
+from streamlit_folium import st_folium
 
 # MBTI 궁합 추천 및 데이트 코스
 mbti_matches = {
@@ -19,6 +21,16 @@ mbti_matches = {
     "ISFP": {"match": "ESTJ", "reason": "ESTJ의 결단력과 ISFP의 감수성이 잘 맞습니다.", "date": "한강 피크닉 & 갤러리 데이트 🍱🖌️"},
     "ESTP": {"match": "ISFJ", "reason": "ISFJ의 따뜻함과 ESTP의 모험심이 잘 어울립니다.", "date": "카트레이싱 & 야시장 구경 🏎️🌮"},
     "ESFP": {"match": "ISTJ", "reason": "ISTJ의 안정감이 ESFP의 감정 표현을 잘 수용합니다.", "date": "박물관 & 고급 다이닝 데이트 🏺🍽️"},
+}
+
+# 추천 장소 목록 (서울)
+seoul_places = {
+    "북촌 한옥마을": [37.5826, 126.9830],
+    "서울숲": [37.5444, 127.0370],
+    "한강 반포공원": [37.5123, 126.9957],
+    "DDP (동대문디자인플라자)": [37.5665, 127.0095],
+    "남산타워": [37.5512, 126.9882],
+    "경복궁": [37.5796, 126.9770]
 }
 
 # Streamlit 앱 설정
@@ -51,6 +63,18 @@ if selected_mbti in mbti_matches:
     st.markdown(f"#### 💑 추천 데이트 코스: {match['date']}")
 else:
     st.warning("해당 MBTI에 대한 커플 추천 정보가 아직 없습니다. 🙏")
+
+# 장소 추천 섹션
+st.markdown("---")
+st.markdown("### 📍 서울에서 가볼만한 추천 장소")
+selected_place = st.selectbox("데이트 장소를 골라보세요!", list(seoul_places.keys()))
+
+if selected_place:
+    lat, lon = seoul_places[selected_place]
+    st.markdown(f"**{selected_place}** 위치 보기 🗺️")
+    map_view = folium.Map(location=[lat, lon], zoom_start=15)
+    folium.Marker([lat, lon], popup=selected_place).add_to(map_view)
+    st_folium(map_view, width=700, height=500)
 
 # 하단 영역
 st.markdown("""

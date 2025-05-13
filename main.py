@@ -1,57 +1,56 @@
 import streamlit as st
 from PIL import Image
 
-# MBTI to job mapping dictionary
-mbti_jobs = {
-    "INTJ": ["전략 컨설턴트 💼", "데이터 과학자 📊", "AI 연구원 🤖"],
-    "INTP": ["이론 물리학자 🧪", "프로그래머 💻", "UX 디자이너 🎨"],
-    "ENTJ": ["경영 컨설턴트 📈", "스타트업 CEO 🚀", "프로젝트 매니저 🗂️"],
-    "ENTP": ["기업가 🚀", "마케터 📣", "방송인 🎙️"],
-    "INFJ": ["상담사 💬", "작가 ✍️", "사회운동가 🌍"],
-    "INFP": ["작가 ✍️", "상담사 💬", "예술가 🎨"],
-    "ENFJ": ["교사 👩‍🏫", "HR 매니저 🧑‍💼", "사회복지사 ❤️"],
-    "ENFP": ["홍보 전문가 📢", "배우 🎭", "디자이너 🎨"],
-    "ISTJ": ["회계사 📊", "법률가 ⚖️", "엔지니어 🛠️"],
-    "ISFJ": ["간호사 👩‍⚕️", "교사 👩‍🏫", "사회복지사 ❤️"],
-    "ESTJ": ["경영 관리자 🏢", "프로젝트 매니저 🗃️", "정부 공무원 🏛️"],
-    "ESFJ": ["이벤트 플래너 🎉", "간호사 👩‍⚕️", "고객 서비스 담당자 🤝"],
-    "ISTP": ["기술자 🔧", "응급 구조대원 🚑", "파일럿 🛫"],
-    "ISFP": ["디자이너 🎨", "사진작가 📷", "요리사 👨‍🍳"],
-    "ESTP": ["세일즈 전문가 💼", "기업가 🚀", "운동선수 🏃‍♂️"],
-    "ESFP": ["연예인 🌟", "이벤트 코디네이터 🎈", "여행 가이드 🌍"]
+# MBTI 궁합 추천 및 데이트 코스
+mbti_matches = {
+    "INTJ": {"match": "ENFP", "reason": "ENFP의 따뜻함과 창의력이 INTJ의 계획적인 성향을 보완해줍니다.", "date": "아날로그 감성 북카페 & 창작 공방 체험 📚🎨"},
+    "INTP": {"match": "ESFJ", "reason": "ESFJ의 사교성과 따뜻함이 INTP의 내향적 성향에 활력을 줍니다.", "date": "전시회 데이트 & 디저트 카페 🍰🖼️"},
+    "ENTJ": {"match": "INFP", "reason": "INFP의 감성적인 배려가 ENTJ의 열정과 잘 어우러집니다.", "date": "공원 산책 & 감성 영화관 🎬🌳"},
+    "ENTP": {"match": "INFJ", "reason": "INFJ의 이상주의와 ENTP의 에너지가 깊이 있는 소통을 가능하게 합니다.", "date": "북토크 & 즉흥 여행 📚✈️"},
+    "INFJ": {"match": "ENFP", "reason": "감성과 이상을 추구하는 INFJ에게 ENFP의 따뜻함이 큰 위로가 됩니다.", "date": "시집 낭독회 & 벽화마을 데이트 🎨📖"},
+    "INFP": {"match": "ENTJ", "reason": "INFP의 이상주의와 ENTJ의 추진력이 좋은 균형을 이룹니다.", "date": "감성 카페 & 마켓 구경 ☕🛍️"},
+    "ENFJ": {"match": "INFP", "reason": "서로에 대한 공감 능력이 뛰어나 따뜻한 관계를 유지합니다.", "date": "소극장 연극 & 야경 산책 🎭🌃"},
+    "ENFP": {"match": "INTJ", "reason": "INTJ의 깊은 사고력과 ENFP의 창의성은 훌륭한 시너지를 냅니다.", "date": "보드게임 카페 & 벼룩시장 🧩🛒"},
+    "ISTJ": {"match": "ESFP", "reason": "ESFP의 즉흥성과 ISTJ의 책임감이 상호 보완됩니다.", "date": "테마파크 & 저녁 파스타 데이트 🎢🍝"},
+    "ISFJ": {"match": "ESTP", "reason": "ISFJ의 배려심과 ESTP의 활기찬 성격이 조화를 이룹니다.", "date": "실내 암벽등반 & 건강식 디너 🧗🥗"},
+    "ESTJ": {"match": "ISFP", "reason": "ESTJ의 조직력과 ISFP의 부드러움이 균형을 이룹니다.", "date": "아쿠아리움 & 자연사 박물관 🐠🏛️"},
+    "ESFJ": {"match": "INTP", "reason": "ESFJ의 감정 표현력과 INTP의 분석력이 서로를 자극합니다.", "date": "맛집 투어 & 별자리 관측 🌌🍜"},
+    "ISTP": {"match": "ENFJ", "reason": "ENFJ의 따뜻한 관심이 ISTP의 조용한 성향을 끌어냅니다.", "date": "VR 체험 & 플래너 만들기 🎮📓"},
+    "ISFP": {"match": "ESTJ", "reason": "ESTJ의 결단력과 ISFP의 감수성이 잘 맞습니다.", "date": "한강 피크닉 & 갤러리 데이트 🍱🖌️"},
+    "ESTP": {"match": "ISFJ", "reason": "ISFJ의 따뜻함과 ESTP의 모험심이 잘 어울립니다.", "date": "카트레이싱 & 야시장 구경 🏎️🌮"},
+    "ESFP": {"match": "ISTJ", "reason": "ISTJ의 안정감이 ESFP의 감정 표현을 잘 수용합니다.", "date": "박물관 & 고급 다이닝 데이트 🏺🍽️"},
 }
 
 # Streamlit 앱 설정
-st.set_page_config(page_title="MBTI 직업 추천기 💡", page_icon="🧠", layout="wide")
+st.set_page_config(page_title="MBTI 커플 궁합 추천 💘", page_icon="💑", layout="wide")
 
 # 헤더 영역
 st.markdown("""
-    <h1 style='text-align: center; color: #ff69b4;'>✨ MBTI 기반 진로 추천 웹앱 ✨</h1>
-    <h3 style='text-align: center;'>당신의 성격 유형에 맞는 직업을 알아보세요! 🌟</h3>
+    <h1 style='text-align: center; color: #ff69b4;'>💞 MBTI 궁합 추천 웹앱 💞</h1>
+    <h3 style='text-align: center;'>당신의 성격 유형에 맞는 최고의 커플 매칭을 알아보세요! 🌟</h3>
 """, unsafe_allow_html=True)
 
 # 사이드바 설정
 st.sidebar.header("📌 사용 방법")
-st.sidebar.write("MBTI 유형을 선택하면 추천 직업이 나와요!")
-selected_mbti = st.sidebar.selectbox("당신의 MBTI 유형은 무엇인가요? 🧬", list(mbti_jobs.keys()))
+st.sidebar.write("MBTI 유형을 선택하면 궁합 좋은 커플 유형과 데이트 코스를 추천해줘요!")
+selected_mbti = st.sidebar.selectbox("당신의 MBTI 유형은 무엇인가요? 🧬", list(mbti_matches.keys()))
 
 # 메인 콘텐츠
 st.markdown("""
 <div style='text-align: center;'>
-    <img src='https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif' width='300'>
+    <img src='https://media.giphy.com/media/26FPpP8K0vBSF7rNu/giphy.gif' width='300'>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown(f"## 🧠 당신의 MBTI 유형은 **:rainbow[{selected_mbti}]**!")
+st.markdown(f"## 💌 당신의 MBTI는 **:rainbow[{selected_mbti}]**!")
 
-if selected_mbti in mbti_jobs:
-    st.markdown("### 🌈 추천 직업 리스트:")
-    cols = st.columns(3)
-    for i, job in enumerate(mbti_jobs[selected_mbti]):
-        with cols[i % 3]:
-            st.success(f"{job}")
+if selected_mbti in mbti_matches:
+    match = mbti_matches[selected_mbti]
+    st.markdown(f"### 💘 가장 잘 어울리는 커플 유형: **{match['match']}**")
+    st.markdown(f"#### 💡 이유: {match['reason']}")
+    st.markdown(f"#### 💑 추천 데이트 코스: {match['date']}")
 else:
-    st.warning("해당 MBTI에 대한 추천 정보가 아직 없습니다. 🙏")
+    st.warning("해당 MBTI에 대한 커플 추천 정보가 아직 없습니다. 🙏")
 
 # 하단 영역
 st.markdown("""
